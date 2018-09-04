@@ -3,6 +3,12 @@ package exersices
 object MyListGenerics extends App {
   println("Testing Scala Linked List!")
 
+  val listOfIntegers: MyListGenerics[Int] = new ConsGenerics(1, new ConsGenerics(2, EmptyGenerics))
+  val listOfString: MyListGenerics[String] = new ConsGenerics("Hello", new ConsGenerics("Scala", EmptyGenerics))
+
+  println(listOfIntegers.toString)
+  println(listOfString.toString)
+
 //  val l: LinkedListGenerics = new LinkedListGenerics()
 //  println(l.isEmpty)
 //  l.add(0).add(1).add(2)
@@ -21,7 +27,7 @@ object MyListGenerics extends App {
   println(l1)*/
 }
 
-abstract class MyListGenerics[A] {
+abstract class MyListGenerics[+A] {
   /*
     List of integers, singly linked
 
@@ -37,34 +43,34 @@ abstract class MyListGenerics[A] {
   def tail: MyListGenerics[A]
 
   def isEmpty: Boolean
-  def add(n: A): MyListGenerics[A]
+  def add[B >: A](n: B): MyListGenerics[B]
 
   def printElements: String
   override def toString: String = "[" + printElements + "]"
 }
 
 // Class implementation:
-/*
-object EmptyGenerics extends MyListGenerics {
-  def head[A]: A = throw new NoSuchElementException
-  def tail[A]: MyListGenerics[A] = throw new NoSuchElementException
+
+object EmptyGenerics extends MyListGenerics[Nothing] {
+  def head: Nothing = throw new NoSuchElementException
+  def tail: MyListGenerics[Nothing] = throw new NoSuchElementException
   def isEmpty: Boolean = true
-  def add[A](n: A): MyListGenerics[A] = new ConsGenerics[A](n, EmptyGenerics)
+  def add[B >: Nothing](n: B): MyListGenerics[B] = new ConsGenerics(n, EmptyGenerics)
 
   override def printElements: String = ""
 }
 
-class ConsGenerics[A](h: A, t: MyListGenerics[A]) extends MyListGenerics {
-  def head[A]: A = h
-  def tail[A]: MyListGenerics[A] = t
+class ConsGenerics[+A](h: A, t: MyListGenerics[A]) extends MyListGenerics[A] {
+  def head: A = h
+  def tail: MyListGenerics[A] = t
   def isEmpty: Boolean = false
-  def add[A](n: A): MyListGenerics[A] = new ConsGenerics(n, this)
+  def add[B >: A](n: B): MyListGenerics[B] = new ConsGenerics(n, this)
 
   override def printElements: String =
     if (t.isEmpty) "" + h
     else h + " " + t.printElements
 }
-*/
+
 
 // My implementation:
 /*
