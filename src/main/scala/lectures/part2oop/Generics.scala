@@ -10,7 +10,7 @@ object Generics extends App {
     Can accept parameter B, which is supper type of A
     (Can accept Animal because Animal is super type of Cat)
     If Animal element is added, list to become List[Animal] (not List[Cat])
-     */
+    */
   }
 
   class MyMap[Key, Value]
@@ -20,10 +20,10 @@ object Generics extends App {
 
   // generic methods:
   object MyList {
-    def empty[A]: MyList[A] = ???
+    //def empty[A]: MyList[A] = ???
   }
 
-  val emptyListOfIntegers = MyList.empty[Int]
+  //val emptyListOfIntegers = MyList.empty[Int]
 
   // variance problem
   class Animal
@@ -55,8 +55,68 @@ object Generics extends App {
   val cage = new Cage(new Dog)
 
   class Car
-  val newCage = new Cage(new Car) // this is illegal because Car is not sub-type of Animal
+  // this is illegal because Car is not sub-type of Animal
+  //val newCage = new Cage(new Car)
 
   // bounded types solve a variance problem we want to write
   // covariant collections
+
+  // --------------
+
+  abstract class printMe[A] {
+    def p[A](i: A): Unit
+  }
+
+  class printObject[A]() extends printMe[A] {
+    def p[A](i: A): Unit = println(i)
+  }
+
+  object printObject extends printMe {
+    def p[A](i: A): Unit = println("Hello from object (" + i + ")")
+  }
+
+  val p = new printObject[Int]
+  p.p(1)
+
+  val s = new printObject[String]
+  s.p("Hello there")
+
+  printObject.p(0)
+  printObject.p("Hello")
+
+  // ---------------
+
+  def getMiddle[T](a: Array[T]) = a(a.length / 2)
+
+  println(getMiddle(Array("one", "two", "three")))
+
+  val f = getMiddle[String] _
+
+  println(f(Array("a", "b")))
+
+  // Takes two parameters of different types
+  class PairOne[T, S](val first: T, val second: S)
+
+  // Takes two parameters of the same type
+
+  // To make sure that type T has compareTo members,
+  // we need to add upper bound
+  class PairTwo[T <: Comparable[T]](val first: T, val second: T) {
+    def smaller: T = if (first.compareTo(second) < 0) first
+    else second
+  }
+
+  val p1 = new PairOne[Any, Any](1, "Hello")
+  val p2 = new PairOne(2, "Hello again")
+
+  //val p3 = new PairTwo[Any](1, 1)
+  //val p4 = new PairTwo("Hello", "World")
+
+  println(p1.first + " " + p1.second)
+  println(p2.first + " " + p2.second)
+
+  class Person
+  class Student extends Person
+
+  //def makeFriends(p: Pair[Person])
 }
