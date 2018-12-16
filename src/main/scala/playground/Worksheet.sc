@@ -34,3 +34,20 @@ factorial2(10)
 val name = "Ilya"
 val x1 = 2
 val y = x1 + " " + name + " there"
+
+val a:Byte = 1
+val maxShort:Short = 32767
+
+1 + 4
+1.+(4)
+
+-5.abs
+Math.abs(-5)
+
+
+
+
+
+
+
+
